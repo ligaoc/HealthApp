@@ -1,6 +1,7 @@
 package com.healthapp.data.api
 
 import com.healthapp.data.model.ApiResponse
+import com.healthapp.data.model.alarm.AlarmDetailResponse
 import com.healthapp.data.model.alarm.AlarmListResponse
 import com.healthapp.data.model.alarm.HandleAlarmRequest
 import com.healthapp.data.model.alarm.SOSRequest
@@ -18,6 +19,11 @@ interface AlarmApi {
         @Query("page") page: Int,
         @Query("size") size: Int
     ): ApiResponse<AlarmListResponse>
+
+    @GET("api/alarm/detail")
+    suspend fun getAlarmDetail(
+        @Query("alarmId") alarmId: String
+    ): ApiResponse<AlarmDetailResponse>
 
     @POST("api/alarm/sos")
     suspend fun sendSOS(@Body request: SOSRequest): ApiResponse<SOSResponse>

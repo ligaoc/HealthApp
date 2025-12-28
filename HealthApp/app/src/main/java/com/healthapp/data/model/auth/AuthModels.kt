@@ -35,6 +35,8 @@ data class UserProfileResponse(
     val avatar: String?,
     val gender: String?,
     val age: Int?,
+    val height: Int?,
+    val weight: Float?,
     val organizationId: String?,
     val organizationName: String?
 )

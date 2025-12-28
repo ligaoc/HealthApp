@@ -4,6 +4,7 @@ import com.healthapp.data.api.AuthApi
 import com.healthapp.data.local.UserPreferences
 import com.healthapp.data.model.auth.LoginRequest
 import com.healthapp.data.model.auth.RegisterRequest
+import com.healthapp.data.model.auth.UserProfileResponse
 import com.healthapp.domain.model.User
 import com.healthapp.domain.model.UserRole
 import com.healthapp.domain.repository.AuthRepository
@@ -104,5 +105,18 @@ class AuthRepositoryImpl @Inject constructor(
 
     override fun getCurrentUserFlow(): Flow<User?> {
         return userPreferences.currentUser
+    }
+
+    override suspend fun getProfile(): Result<UserProfileResponse> {
+        return try {
+            val response = authApi.getProfile()
+            if (response.isSuccess && response.data != null) {
+                Result.success(response.data)
+            } else {
+                Result.failure(Exception(response.message ?: "获取失败"))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
     }
 }

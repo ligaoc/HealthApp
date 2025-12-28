@@ -54,6 +54,7 @@ const randomFloat = (min, max, decimals = 1) => parseFloat((Math.random() * (max
 
 // 导入路由
 const authRoutes = require('./routes/auth');
+const userRoutes = require('./routes/user');
 const healthRoutes = require('./routes/health');
 const deviceRoutes = require('./routes/device');
 const alarmRoutes = require('./routes/alarm');
@@ -61,7 +62,8 @@ const doctorRoutes = require('./routes/doctor');
 
 // 使用路由
 app.use('/api/auth', authRoutes);
-app.use('/api/user', authRoutes);
+app.use('/api/user', authRoutes);  // 保留原有的profile接口
+app.use('/api/user', userRoutes);  // 新增的用户设置接口
 app.use('/api/health', healthRoutes);
 app.use('/api/device', deviceRoutes);
 app.use('/api/alarm', alarmRoutes);

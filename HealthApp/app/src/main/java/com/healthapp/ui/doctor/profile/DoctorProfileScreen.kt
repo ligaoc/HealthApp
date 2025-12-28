@@ -54,11 +54,18 @@ import com.healthapp.ui.theme.*
 
 
 @Composable
-fun DoctorProfileScreen(onLogout: () -> Unit) {
+fun DoctorProfileScreen(
+    onLogout: () -> Unit,
+    onNavigateToPersonalInfo: () -> Unit = {},
+    onNavigateToNotifications: () -> Unit = {},
+    onNavigateToPrivacy: () -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
+    onNavigateToAbout: () -> Unit = {}
+) {
     var showLogoutDialog by remember { mutableStateOf(false) }
 
     Column(modifier = Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp)) {
-        DoctorProfileHeader()
+        DoctorProfileHeader(onEditClick = onNavigateToPersonalInfo)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -76,9 +83,9 @@ fun DoctorProfileScreen(onLogout: () -> Unit) {
         ProfileMenuSection(
             title = "账户设置",
             items = listOf(
-                DoctorMenuItem(Icons.Default.Person, "个人信息", "查看和编辑个人资料"),
-                DoctorMenuItem(Icons.Default.People, "患者管理", "管理负责的患者"),
-                DoctorMenuItem(Icons.Default.Notifications, "消息通知", "设置通知偏好")
+                DoctorMenuItem(Icons.Default.Person, "个人信息", "查看和编辑个人资料", onNavigateToPersonalInfo),
+                DoctorMenuItem(Icons.Default.People, "患者管理", "管理负责的患者", {}),
+                DoctorMenuItem(Icons.Default.Notifications, "消息通知", "设置通知偏好", onNavigateToNotifications)
             )
         )
 
@@ -87,9 +94,9 @@ fun DoctorProfileScreen(onLogout: () -> Unit) {
         ProfileMenuSection(
             title = "其他",
             items = listOf(
-                DoctorMenuItem(Icons.Default.Security, "隐私设置", "管理数据隐私"),
-                DoctorMenuItem(Icons.Default.Settings, "系统设置", "应用设置"),
-                DoctorMenuItem(Icons.Default.Info, "关于我们", "版本信息")
+                DoctorMenuItem(Icons.Default.Security, "隐私设置", "管理数据隐私", onNavigateToPrivacy),
+                DoctorMenuItem(Icons.Default.Settings, "系统设置", "应用设置", onNavigateToSettings),
+                DoctorMenuItem(Icons.Default.Info, "关于我们", "版本信息", onNavigateToAbout)
             )
         )
 
@@ -122,7 +129,7 @@ fun DoctorProfileScreen(onLogout: () -> Unit) {
 
 
 @Composable
-private fun DoctorProfileHeader() {
+private fun DoctorProfileHeader(onEditClick: () -> Unit = {}) {
     Card(modifier = Modifier.fillMaxWidth(), shape = RoundedCornerShape(20.dp), colors = CardDefaults.cardColors(containerColor = Color.Transparent)) {
         Box(modifier = Modifier.fillMaxWidth().background(brush = Brush.linearGradient(listOf(SecondaryPurple, PrimaryBlue))).padding(24.dp)) {
             Row(verticalAlignment = Alignment.CenterVertically) {
@@ -139,7 +146,7 @@ private fun DoctorProfileHeader() {
                         Text(text = "医生", color = Color.White, fontSize = 12.sp)
                     }
                 }
-                Icon(imageVector = Icons.Default.Edit, contentDescription = "编辑", tint = Color.White, modifier = Modifier.size(24.dp).clickable { })
+                Icon(imageVector = Icons.Default.Edit, contentDescription = "编辑", tint = Color.White, modifier = Modifier.size(24.dp).clickable { onEditClick() })
             }
         }
     }
@@ -156,7 +163,7 @@ private fun WorkStatCard(title: String, value: String, modifier: Modifier = Modi
     }
 }
 
-data class DoctorMenuItem(val icon: ImageVector, val title: String, val subtitle: String)
+data class DoctorMenuItem(val icon: ImageVector, val title: String, val subtitle: String, val onClick: () -> Unit = {})
 
 @Composable
 private fun ProfileMenuSection(title: String, items: List<DoctorMenuItem>) {
@@ -174,7 +181,7 @@ private fun ProfileMenuSection(title: String, items: List<DoctorMenuItem>) {
 
 @Composable
 private fun DoctorProfileMenuItem(item: DoctorMenuItem) {
-    Row(modifier = Modifier.fillMaxWidth().clickable { }.padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+    Row(modifier = Modifier.fillMaxWidth().clickable { item.onClick() }.padding(16.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
         Row(verticalAlignment = Alignment.CenterVertically) {
             Box(modifier = Modifier.size(40.dp).clip(RoundedCornerShape(10.dp)).background(PrimaryBlue.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                 Icon(imageVector = item.icon, contentDescription = null, tint = PrimaryBlue, modifier = Modifier.size(20.dp))

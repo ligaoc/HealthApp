@@ -40,7 +40,17 @@ data class DoctorNavItem(
 )
 
 @Composable
-fun DoctorMainScreen(navController: NavController) {
+fun DoctorMainScreen(
+    navController: NavController,
+    onNavigateToPersonalInfo: () -> Unit = {},
+    onNavigateToNotifications: () -> Unit = {},
+    onNavigateToPrivacy: () -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
+    onNavigateToAbout: () -> Unit = {},
+    onNavigateToMessages: () -> Unit = {},
+    onNavigateToPatientDetail: (String) -> Unit = {},
+    onNavigateToAlarmDetail: (String) -> Unit = {}
+) {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     val navItems = listOf(
@@ -82,15 +92,23 @@ fun DoctorMainScreen(navController: NavController) {
                 .padding(paddingValues)
         ) {
             when (selectedIndex) {
-                0 -> DoctorDashboardScreen()
-                1 -> PatientListScreen()
-                2 -> DoctorAlarmListScreen()
+                0 -> DoctorDashboardScreen(
+                    onNavigateToMessages = onNavigateToMessages,
+                    onNavigateToAlarmDetail = onNavigateToAlarmDetail
+                )
+                1 -> PatientListScreen(onPatientClick = onNavigateToPatientDetail)
+                2 -> DoctorAlarmListScreen(onAlarmClick = onNavigateToAlarmDetail)
                 3 -> DoctorProfileScreen(
                     onLogout = {
                         navController.navigate(Screen.Login.route) {
                             popUpTo(0) { inclusive = true }
                         }
-                    }
+                    },
+                    onNavigateToPersonalInfo = onNavigateToPersonalInfo,
+                    onNavigateToNotifications = onNavigateToNotifications,
+                    onNavigateToPrivacy = onNavigateToPrivacy,
+                    onNavigateToSettings = onNavigateToSettings,
+                    onNavigateToAbout = onNavigateToAbout
                 )
             }
         }

@@ -131,6 +131,41 @@ router.get('/profile', (req, res) => {
       avatar: user.avatar,
       gender: user.gender,
       age: user.age,
+      height: user.height || 170,
+      weight: user.weight || 68,
+      organizationId: user.organizationId,
+      organizationName: user.organizationName
+    }
+  });
+});
+
+// 更新用户信息
+router.put('/profile', (req, res) => {
+  const { name, gender, age, height, weight, avatar } = req.body;
+  
+  // 简化处理，更新第一个患者用户
+  const user = users['13800138000'];
+  
+  if (name !== undefined) user.name = name;
+  if (gender !== undefined) user.gender = gender;
+  if (age !== undefined) user.age = age;
+  if (height !== undefined) user.height = height;
+  if (weight !== undefined) user.weight = weight;
+  if (avatar !== undefined) user.avatar = avatar;
+  
+  res.json({
+    code: 200,
+    message: '更新成功',
+    data: {
+      userId: user.userId,
+      name: user.name,
+      phone: user.phone,
+      role: user.role,
+      avatar: user.avatar,
+      gender: user.gender,
+      age: user.age,
+      height: user.height || 170,
+      weight: user.weight || 68,
       organizationId: user.organizationId,
       organizationName: user.organizationName
     }

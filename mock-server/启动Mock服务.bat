@@ -23,6 +23,18 @@ echo [信息] Node.js 版本:
 node -v
 echo.
 
+:: 检查并清理端口占用
+echo [信息] 检查端口 3000 占用情况...
+for /f "tokens=5" %%a in ('netstat -ano ^| findstr ":3000 " ^| findstr "LISTENING"') do (
+    echo [信息] 发现端口 3000 被进程 %%a 占用，正在终止...
+    taskkill /F /PID %%a >nul 2>nul
+    if %errorlevel% equ 0 (
+        echo [信息] 已终止进程 %%a
+    )
+)
+echo [信息] 端口 3000 已就绪
+echo.
+
 :: 检查是否已安装依赖
 if not exist "node_modules" (
     echo [信息] 首次运行，正在安装依赖...

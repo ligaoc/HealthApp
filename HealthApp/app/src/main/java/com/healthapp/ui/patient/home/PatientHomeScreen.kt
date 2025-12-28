@@ -69,7 +69,8 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PatientHomeScreen(
-    viewModel: PatientHomeViewModel = hiltViewModel()
+    viewModel: PatientHomeViewModel = hiltViewModel(),
+    onNavigateToMessages: () -> Unit = {}
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
@@ -89,7 +90,7 @@ fun PatientHomeScreen(
                 .padding(16.dp)
         ) {
             // 顶部问候
-            GreetingHeader(userName = uiState.user?.name ?: "用户")
+            GreetingHeader(userName = uiState.user?.name ?: "用户", onNotificationClick = onNavigateToMessages)
 
             Spacer(modifier = Modifier.height(20.dp))
 
@@ -130,7 +131,7 @@ fun PatientHomeScreen(
 }
 
 @Composable
-private fun GreetingHeader(userName: String) {
+private fun GreetingHeader(userName: String, onNotificationClick: () -> Unit = {}) {
     val greeting = remember {
         val hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY)
         when {
@@ -180,7 +181,7 @@ private fun GreetingHeader(userName: String) {
                 )
             }
         }
-        IconButton(onClick = { }) {
+        IconButton(onClick = onNotificationClick) {
             Icon(
                 imageVector = Icons.Default.Notifications,
                 contentDescription = "通知",

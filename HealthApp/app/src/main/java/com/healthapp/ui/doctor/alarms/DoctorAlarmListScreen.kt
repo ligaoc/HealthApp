@@ -46,17 +46,17 @@ import com.healthapp.ui.theme.*
 data class AlarmItem(val id: String, val type: String, val level: String, val patientName: String, val content: String, val time: String, val status: String)
 
 @Composable
-fun DoctorAlarmListScreen() {
+fun DoctorAlarmListScreen(onAlarmClick: (String) -> Unit = {}) {
     var selectedFilter by remember { mutableIntStateOf(0) }
     val filters = listOf("全部", "待处理", "已处理")
 
     val alarms = remember {
         listOf(
-            AlarmItem("1", "heartRate", "critical", "张三", "心率过高：125 bpm", "10分钟前", "pending"),
-            AlarmItem("2", "bloodPressure", "high", "李四", "血压异常：160/100 mmHg", "30分钟前", "pending"),
-            AlarmItem("3", "bloodOxygen", "medium", "王五", "血氧偏低：92%", "1小时前", "handled"),
-            AlarmItem("4", "fall", "critical", "赵六", "检测到跌倒事件", "2小时前", "handled"),
-            AlarmItem("5", "heartRate", "high", "钱七", "心率持续偏高", "3小时前", "pending")
+            AlarmItem("A10001", "heartRate", "critical", "张三", "心率过高：125 bpm", "10分钟前", "pending"),
+            AlarmItem("A10002", "bloodPressure", "high", "李四", "血压异常：160/100 mmHg", "30分钟前", "pending"),
+            AlarmItem("A10003", "bloodOxygen", "medium", "王五", "血氧偏低：92%", "1小时前", "handled"),
+            AlarmItem("A10004", "fall", "critical", "赵六", "检测到跌倒事件", "2小时前", "handled"),
+            AlarmItem("A10005", "heartRate", "high", "钱七", "心率持续偏高", "3小时前", "pending")
         )
     }
 
@@ -81,7 +81,7 @@ fun DoctorAlarmListScreen() {
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
             items(alarms.filter { selectedFilter == 0 || (selectedFilter == 1 && it.status == "pending") || (selectedFilter == 2 && it.status == "handled") }) { alarm ->
-                AlarmCard(alarm = alarm)
+                AlarmCard(alarm = alarm, onClick = { onAlarmClick(alarm.id) })
             }
         }
     }
@@ -89,12 +89,12 @@ fun DoctorAlarmListScreen() {
 
 
 @Composable
-private fun AlarmCard(alarm: AlarmItem) {
+private fun AlarmCard(alarm: AlarmItem, onClick: () -> Unit = {}) {
     val levelColor = when (alarm.level) { "critical" -> AlarmCritical; "high" -> AlarmHigh; "medium" -> AlarmMedium; else -> AlarmLow }
     val typeIcon: ImageVector = when (alarm.type) { "heartRate" -> Icons.Default.Favorite; "bloodPressure" -> Icons.Default.LocalHospital; "bloodOxygen" -> Icons.Default.Opacity; else -> Icons.Default.Warning }
     val typeColor = when (alarm.type) { "heartRate" -> HeartRateColor; "bloodPressure" -> BloodPressureColor; "bloodOxygen" -> BloodOxygenColor; else -> WarningOrange }
 
-    Card(modifier = Modifier.fillMaxWidth().clickable { }, shape = RoundedCornerShape(16.dp)) {
+    Card(modifier = Modifier.fillMaxWidth().clickable { onClick() }, shape = RoundedCornerShape(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.Top) {
             Box(modifier = Modifier.size(48.dp).clip(CircleShape).background(typeColor.copy(alpha = 0.15f)), contentAlignment = Alignment.Center) {
                 Icon(imageVector = typeIcon, contentDescription = null, tint = typeColor, modifier = Modifier.size(24.dp))

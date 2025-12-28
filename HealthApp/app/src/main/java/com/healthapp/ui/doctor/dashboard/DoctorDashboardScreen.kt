@@ -51,7 +51,10 @@ import androidx.compose.ui.unit.sp
 import com.healthapp.ui.theme.*
 
 @Composable
-fun DoctorDashboardScreen() {
+fun DoctorDashboardScreen(
+    onNavigateToMessages: () -> Unit = {},
+    onNavigateToAlarmDetail: (String) -> Unit = {}
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()

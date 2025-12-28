@@ -6,6 +6,7 @@ import com.healthapp.data.api.AuthApi
 import com.healthapp.data.api.DeviceApi
 import com.healthapp.data.api.DoctorApi
 import com.healthapp.data.api.HealthApi
+import com.healthapp.data.api.UserApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -74,5 +75,11 @@ object NetworkModule {
     @Singleton
     fun provideDoctorApi(retrofit: Retrofit): DoctorApi {
         return retrofit.create(DoctorApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserApi(retrofit: Retrofit): UserApi {
+        return retrofit.create(UserApi::class.java)
     }
 }

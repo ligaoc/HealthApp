@@ -20,6 +20,8 @@ val SuccessGreen = Color(0xFF4CAF50)
 val WarningOrange = Color(0xFFFF9800)
 val ErrorRed = Color(0xFFF44336)
 val InfoBlue = Color(0xFF2196F3)
+val HealthYellow = Color(0xFFFFEB3B)
+val HealthRed = Color(0xFFE91E63)
 
 // Alarm Level Colors
 val AlarmCritical = Color(0xFFD32F2F)

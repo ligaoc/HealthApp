@@ -1,9 +1,13 @@
 package com.healthapp.di
 
+import com.healthapp.data.repository.AlarmRepositoryImpl
 import com.healthapp.data.repository.AuthRepositoryImpl
 import com.healthapp.data.repository.HealthRepositoryImpl
+import com.healthapp.data.repository.UserSettingsRepositoryImpl
+import com.healthapp.domain.repository.AlarmRepository
 import com.healthapp.domain.repository.AuthRepository
 import com.healthapp.domain.repository.HealthRepository
+import com.healthapp.domain.repository.UserSettingsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -25,4 +29,16 @@ abstract class RepositoryModule {
     abstract fun bindHealthRepository(
         healthRepositoryImpl: HealthRepositoryImpl
     ): HealthRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindUserSettingsRepository(
+        userSettingsRepositoryImpl: UserSettingsRepositoryImpl
+    ): UserSettingsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindAlarmRepository(
+        alarmRepositoryImpl: AlarmRepositoryImpl
+    ): AlarmRepository
 }

@@ -56,7 +56,15 @@ import com.healthapp.ui.theme.GradientStart
 import com.healthapp.ui.theme.PrimaryBlue
 
 @Composable
-fun PatientProfileScreen(onLogout: () -> Unit) {
+fun PatientProfileScreen(
+    onLogout: () -> Unit,
+    onNavigateToPersonalInfo: () -> Unit = {},
+    onNavigateToDevices: () -> Unit = {},
+    onNavigateToNotifications: () -> Unit = {},
+    onNavigateToPrivacy: () -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
+    onNavigateToAbout: () -> Unit = {}
+) {
     var showLogoutDialog by remember { mutableStateOf(false) }
 
     Column(
@@ -66,7 +74,7 @@ fun PatientProfileScreen(onLogout: () -> Unit) {
             .padding(16.dp)
     ) {
         // 用户信息卡片
-        ProfileHeader()
+        ProfileHeader(onEditClick = onNavigateToPersonalInfo)
 
         Spacer(modifier = Modifier.height(24.dp))
 
@@ -74,9 +82,9 @@ fun PatientProfileScreen(onLogout: () -> Unit) {
         ProfileMenuSection(
             title = "账户设置",
             items = listOf(
-                MenuItem(Icons.Default.Person, "个人信息", "查看和编辑个人资料"),
-                MenuItem(Icons.Default.Watch, "我的设备", "管理绑定的健康设备"),
-                MenuItem(Icons.Default.Notifications, "消息通知", "设置通知偏好")
+                MenuItem(Icons.Default.Person, "个人信息", "查看和编辑个人资料", onNavigateToPersonalInfo),
+                MenuItem(Icons.Default.Watch, "我的设备", "管理绑定的健康设备", onNavigateToDevices),
+                MenuItem(Icons.Default.Notifications, "消息通知", "设置通知偏好", onNavigateToNotifications)
             )
         )
 
@@ -85,9 +93,9 @@ fun PatientProfileScreen(onLogout: () -> Unit) {
         ProfileMenuSection(
             title = "其他",
             items = listOf(
-                MenuItem(Icons.Default.Security, "隐私设置", "管理数据隐私"),
-                MenuItem(Icons.Default.Settings, "系统设置", "应用设置"),
-                MenuItem(Icons.Default.Info, "关于我们", "版本信息")
+                MenuItem(Icons.Default.Security, "隐私设置", "管理数据隐私", onNavigateToPrivacy),
+                MenuItem(Icons.Default.Settings, "系统设置", "应用设置", onNavigateToSettings),
+                MenuItem(Icons.Default.Info, "关于我们", "版本信息", onNavigateToAbout)
             )
         )
 
@@ -135,7 +143,7 @@ fun PatientProfileScreen(onLogout: () -> Unit) {
 
 
 @Composable
-private fun ProfileHeader() {
+private fun ProfileHeader(onEditClick: () -> Unit = {}) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(20.dp),
@@ -178,14 +186,14 @@ private fun ProfileHeader() {
                     tint = Color.White,
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { }
+                        .clickable { onEditClick() }
                 )
             }
         }
     }
 }
 
-data class MenuItem(val icon: ImageVector, val title: String, val subtitle: String)
+data class MenuItem(val icon: ImageVector, val title: String, val subtitle: String, val onClick: () -> Unit = {})
 
 @Composable
 private fun ProfileMenuSection(title: String, items: List<MenuItem>) {
@@ -206,7 +214,7 @@ private fun ProfileMenuSection(title: String, items: List<MenuItem>) {
 @Composable
 private fun ProfileMenuItem(item: MenuItem) {
     Row(
-        modifier = Modifier.fillMaxWidth().clickable { }.padding(16.dp),
+        modifier = Modifier.fillMaxWidth().clickable { item.onClick() }.padding(16.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ) {

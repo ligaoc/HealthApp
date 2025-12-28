@@ -46,15 +46,15 @@ data class PatientItem(val id: String, val name: String, val age: Int, val gende
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun PatientListScreen() {
+fun PatientListScreen(onPatientClick: (String) -> Unit = {}) {
     var searchQuery by remember { mutableStateOf("") }
     var selectedFilter by remember { mutableIntStateOf(0) }
     val filters = listOf("全部", "高风险", "中风险", "低风险")
 
     val patients = remember {
         listOf(
-            PatientItem("1", "张三", 72, "男", listOf("高血压", "糖尿病"), "high", "online"),
-            PatientItem("2", "李四", 68, "女", listOf("冠心病"), "medium", "online"),
+            PatientItem("U10001", "张三", 72, "男", listOf("高血压", "糖尿病"), "high", "online"),
+            PatientItem("U10002", "李四", 68, "女", listOf("冠心病"), "medium", "online"),
             PatientItem("3", "王五", 75, "男", listOf("高血压"), "low", "offline"),
             PatientItem("4", "赵六", 80, "女", listOf("糖尿病", "高血脂"), "high", "online"),
             PatientItem("5", "钱七", 65, "男", listOf("心律不齐"), "medium", "online")
@@ -93,18 +93,18 @@ fun PatientListScreen() {
         Spacer(modifier = Modifier.height(16.dp))
 
         LazyColumn(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            items(patients) { patient -> PatientCard(patient = patient) }
+            items(patients) { patient -> PatientCard(patient = patient, onClick = { onPatientClick(patient.id) }) }
         }
     }
 }
 
 
 @Composable
-private fun PatientCard(patient: PatientItem) {
+private fun PatientCard(patient: PatientItem, onClick: () -> Unit = {}) {
     val riskColor = when (patient.riskLevel) { "high" -> ErrorRed; "medium" -> WarningOrange; else -> SuccessGreen }
     val riskText = when (patient.riskLevel) { "high" -> "高风险"; "medium" -> "中风险"; else -> "低风险" }
 
-    Card(modifier = Modifier.fillMaxWidth().clickable { }, shape = RoundedCornerShape(16.dp)) {
+    Card(modifier = Modifier.fillMaxWidth().clickable { onClick() }, shape = RoundedCornerShape(16.dp)) {
         Row(modifier = Modifier.fillMaxWidth().padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(modifier = Modifier.size(56.dp).clip(CircleShape).background(PrimaryBlue.copy(alpha = 0.1f)), contentAlignment = Alignment.Center) {
                 Text(text = patient.name.take(1), color = PrimaryBlue, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)

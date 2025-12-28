@@ -38,7 +38,16 @@ data class PatientNavItem(
 )
 
 @Composable
-fun PatientMainScreen(navController: NavController) {
+fun PatientMainScreen(
+    navController: NavController,
+    onNavigateToPersonalInfo: () -> Unit = {},
+    onNavigateToDevices: () -> Unit = {},
+    onNavigateToNotifications: () -> Unit = {},
+    onNavigateToPrivacy: () -> Unit = {},
+    onNavigateToSettings: () -> Unit = {},
+    onNavigateToAbout: () -> Unit = {},
+    onNavigateToMessages: () -> Unit = {}
+) {
     var selectedIndex by remember { mutableIntStateOf(0) }
 
     val navItems = listOf(
@@ -80,7 +89,7 @@ fun PatientMainScreen(navController: NavController) {
                 .padding(paddingValues)
         ) {
             when (selectedIndex) {
-                0 -> PatientHomeScreen()
+                0 -> PatientHomeScreen(onNavigateToMessages = onNavigateToMessages)
                 1 -> HealthDataScreen()
                 2 -> SOSScreen()
                 3 -> PatientProfileScreen(
@@ -88,7 +97,13 @@ fun PatientMainScreen(navController: NavController) {
                         navController.navigate(Screen.Login.route) {
                             popUpTo(0) { inclusive = true }
                         }
-                    }
+                    },
+                    onNavigateToPersonalInfo = onNavigateToPersonalInfo,
+                    onNavigateToDevices = onNavigateToDevices,
+                    onNavigateToNotifications = onNavigateToNotifications,
+                    onNavigateToPrivacy = onNavigateToPrivacy,
+                    onNavigateToSettings = onNavigateToSettings,
+                    onNavigateToAbout = onNavigateToAbout
                 )
             }
         }
